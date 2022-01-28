@@ -3,4 +3,5 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    return request.headers.get('Host').split(':')[0]
+    return 'hello world!'
+    #return request.headers.get('Host').split(':')[0]
