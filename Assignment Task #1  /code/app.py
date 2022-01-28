@@ -5,5 +5,5 @@ import socket
 
 @app.route('/')
 def index():
-    return ("response from container id: ",socket.gethostname())
+    return ("response from container id: ", socket.gethostname() )
     #return request.headers.get('Host').split(':')[0]
