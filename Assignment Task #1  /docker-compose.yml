@@ -16,7 +16,7 @@ services:
       - 8080
 
   nginx:
-    image: nginx:1.13.7
+    image: nginx:latest
     container_name: nginx
     depends_on:
       - flask
