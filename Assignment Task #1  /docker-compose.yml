@@ -16,7 +16,7 @@ services:
       context: ./
       dockerfile: Dockerfile
     image: flask:0.0.3
-    container_name: flask
+    #container_name: flask
     volumes:
       - ./:/code/
     environment:
