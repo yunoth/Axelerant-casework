@@ -12,8 +12,6 @@ services:
     command: flask run --host=0.0.0.0
     networks:
       - my-network
-#    expose:
-#      - 5000
 
   nginx:
     image: nginx:latest
@@ -25,7 +23,7 @@ services:
     networks:
       - my-network
     ports:
-      - 5000:5000
+      - 80:80
 
 networks:
   my-network:
