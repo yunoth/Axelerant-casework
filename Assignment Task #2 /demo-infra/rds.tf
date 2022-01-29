@@ -1,4 +1,4 @@
-module "db_default" {
+module "drupal-db" {
   source = "terraform-aws-modules/rds/aws"
 
   identifier = "drupal-db"
@@ -11,7 +11,7 @@ module "db_default" {
   engine_version       = "8.0.20"
   family               = "mysql8.0" # DB parameter group
   major_engine_version = "8.0"      # DB option group
-  instance_class       = "db.t3.large"
+  instance_class       = "db.t3.micro"
   subnet_ids             = [module.vpc.private_subnets[2],module.vpc.private_subnets[3]]
   vpc_security_group_ids = [aws_security_group.db-sg.id]
   allocated_storage = 20
@@ -28,6 +28,6 @@ module "db_default" {
   backup_retention_period = 0
 
   tags = {
-    Name = drupal-db
+    "Name" = "drupal-db"
   }
 }
