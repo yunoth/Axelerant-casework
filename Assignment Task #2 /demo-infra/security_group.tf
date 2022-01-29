@@ -34,11 +34,19 @@ resource "aws_security_group_rule" "alb-rule" {
 }
 resource "aws_security_group_rule" "instance-rule" {
   type              = "ingress"
-  from_port         = 8080
-  to_port           = 8080
+  from_port         = 80
+  to_port           = 80
   protocol          = "tcp"
   source_security_group_id = aws_security_group.alb-sg.id
   security_group_id = aws_security_group.instance-sg.id
+}
+resource "aws_security_group_rule" "efs-rule" {
+  type              = "ingress"
+  from_port         = 2049
+  to_port           = 2049
+  protocol          = "tcp"
+  security_group_id = aws_security_group.instance-sg.id
+  self = true
 }
 resource "aws_security_group_rule" "db-rule" {
   type              = "ingress"

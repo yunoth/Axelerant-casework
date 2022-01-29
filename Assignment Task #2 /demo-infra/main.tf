@@ -17,6 +17,7 @@ module "vpc" {
 
   enable_nat_gateway = true
   #enable_vpn_gateway = true
+  enable_dns_hostnames = true
 
   tags = {
     Terraform = "true"
@@ -47,19 +48,22 @@ resource "local_file" "public_key_openssh" {
 data "template_file" "user_data" {
   count    = 1
   template = "${file("${path.module}/userdata.tpl")}"
+  vars = {
+    efs_target = aws_efs_mount_target.efs-mt[0].dns_name
+  }
 }
 
 module "asg" {
   source  = "terraform-aws-modules/autoscaling/aws"
   version = "~> 4.0"
-  name = "demo-asg"
+  name = "drupal-asg"
   min_size                  = 0
   max_size                  = 1
   desired_capacity          = 1
   wait_for_capacity_timeout = 0
   health_check_type         = "EC2"
   vpc_zone_identifier       = [module.vpc.private_subnets[0],module.vpc.private_subnets[1]]
-  target_group_arns = module.alb.target_group_arns
+  target_group_arns         = module.alb.target_group_arns
   instance_refresh = {
     strategy = "Rolling"
     preferences = {
@@ -68,15 +72,15 @@ module "asg" {
     triggers = ["tag"]
   }
   # Launch template
-  lt_name                = "demo-asg"
-  description            = "Launch template example"
-  update_default_version = true
-  use_lt    = true
-  create_lt = true
+  lt_name                = "drupal-asg"
+  description            = "Launch config example"
+  #update_default_version = true
+  use_lc    = true
+  create_lc = true
   image_id          = "ami-0ed9277fb7eb570c9"
   instance_type     = "t3.micro"
   security_groups = [aws_security_group.instance-sg.id,]
-  user_data =  data.template_file.user_data.0.rendered
+  user_data       =  data.template_file.user_data.0.rendered
   ebs_optimized     = true
   enable_monitoring = true
   iam_instance_profile_arn = aws_iam_instance_profile.ec2_profile.arn
@@ -108,7 +112,7 @@ module "alb" {
     {
       name             = "demo-app"
       backend_protocol = "HTTP"
-      backend_port     = 8080
+      backend_port     = 80
       target_type      = "instance"
     }
   ]
