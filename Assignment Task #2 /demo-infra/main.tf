@@ -58,7 +58,7 @@ module "asg" {
   desired_capacity          = 1
   wait_for_capacity_timeout = 0
   health_check_type         = "EC2"
-  vpc_zone_identifier       = module.vpc.private_subnets
+  vpc_zone_identifier       = [module.vpc.private_subnets[0],module.vpc.private_subnets[1]]
   target_group_arns = module.alb.target_group_arns
   instance_refresh = {
     strategy = "Rolling"
@@ -79,6 +79,7 @@ module "asg" {
   user_data =  data.template_file.user_data.0.rendered
   ebs_optimized     = true
   enable_monitoring = true
+  iam_instance_profile_arn = aws_iam_instance_profile.ec2_profile.arn
   tags = [
     {
       key                 = "Environment"
