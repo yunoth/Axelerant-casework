@@ -32,3 +32,9 @@ resource "aws_iam_policy_attachment" "test-attach" {
   roles      = [aws_iam_role.ec2instance_role.name]
   policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
 }
+
+resource "aws_iam_policy_attachment" "cw-attach" {
+name       = "policy-attachment"
+roles      = [aws_iam_role.ec2instance_role.name]
+policy_arn = "arn:aws:iam::aws:policy/CloudWatchAgentAdminPolicy"
+}

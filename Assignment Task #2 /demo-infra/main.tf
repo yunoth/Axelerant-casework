@@ -72,7 +72,7 @@ module "asg" {
     triggers = ["tag"]
   }
   # Launch template
-  lt_name                = "drupal-asg"
+  lc_name                = "drupal-asg-1"
   description            = "Launch config example"
   #update_default_version = true
   use_lc    = true
@@ -83,7 +83,7 @@ module "asg" {
   user_data       =  data.template_file.user_data.0.rendered
   ebs_optimized     = true
   enable_monitoring = true
-  iam_instance_profile_arn = aws_iam_instance_profile.ec2_profile.arn
+  iam_instance_profile_name = aws_iam_instance_profile.ec2_profile.name
   tags = [
     {
       key                 = "Environment"
